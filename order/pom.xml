@@ -139,6 +139,13 @@
             <configuration>
               <finalName>order</finalName>
               <createDependencyReducedPom>false</createDependencyReducedPom>
+              <!-- without this transformer, we will get the error below. -->
+              <!-- see GitHub issue https://github.com/grpc/grpc-java/issues/5493 and solution https://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html#ServicesResourceTransformer -->
+              <!-- SEVERE: [Channel<1>: (localhost:9090)] Uncaught exception in the SynchronizationContext. Panic! -->
+              <!-- java.lang.IllegalStateException: Could not find policy 'pick_first'. Make sure its implementation is either registered to LoadBalancerRegistry or included in META-INF/services/io.grpc.LoadBalancerProvider from your jar files. -->
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
             </configuration>
           </execution>
         </executions>
